@@ -4,9 +4,13 @@ from fastapi.templating import Jinja2Templates
 
 from app.writing_scorer import score_essay
 
+import os
+
 router = APIRouter(prefix="/writing", tags=["writing"])
 
-templates = Jinja2Templates(directory="app/templates")
+# 使用绝对路径避免运行时 CWD 不一致
+_TEMPLATE_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "templates")
+templates = Jinja2Templates(directory=_TEMPLATE_DIR)
 
 
 def format_result_markdown(result: dict) -> str:
@@ -63,7 +67,7 @@ def format_result_markdown(result: dict) -> str:
 
 @router.get("/", response_class=HTMLResponse)
 async def writing_page(request: Request):
-    return templates.TemplateResponse("writing.html", {"request": request})
+    return templates.TemplateResponse(request=request, name="writing.html")
 
 
 @router.post("/score", response_class=HTMLResponse)
@@ -74,11 +78,9 @@ async def score_essay_endpoint(
 ):
     if not essay or len(essay.strip()) < 50:
         return templates.TemplateResponse(
-            "writing.html",
-            {
-                "request": request,
-                "error": "作文内容太短，请至少输入 50 个字符。",
-            },
+            request=request,
+            name="writing.html",
+            context={"error": "作文内容太短，请至少输入 50 个字符。"},
         )
 
     result = score_essay(essay.strip(), task_type)
@@ -97,15 +99,16 @@ async def score_essay_endpoint(
             f"评分失败：{result['error']}",
         )
         return templates.TemplateResponse(
-            "writing.html",
-            {"request": request, "error": user_message},
+            request=request,
+            name="writing.html",
+            context={"error": user_message},
         )
 
     result_md = format_result_markdown(result)
     return templates.TemplateResponse(
-        "result.html",
-        {
-            "request": request,
+        request=request,
+        name="result.html",
+        context={
             "result_md": result_md,
             "original_essay": essay,
             "task_type": task_type,
