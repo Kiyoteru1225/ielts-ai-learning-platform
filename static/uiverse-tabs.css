@@ -1,0 +1,77 @@
+/* ===== Uiverse Tab 组件 — 任务类型选择器 ===== */
+/* By Pradeepsaranbishnoi — uiverse.io */
+
+.tabs {
+  position: relative;
+  display: flex;
+  background-color: #f1f5f9;
+  border-radius: 12px;
+  padding: 4px;
+  gap: 2px;
+}
+
+.tabs input[type="radio"] {
+  display: none;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  flex: 1;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  color: #64748b;
+  z-index: 1;
+  user-select: none;
+}
+
+.tabs input[type="radio"]:checked + .tab {
+  color: #1e293b;
+  font-weight: 600;
+}
+
+.glider {
+  position: absolute;
+  display: flex;
+  height: 44px;
+  width: calc(50% - 6px);
+  top: 4px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: transform 0.25s ease;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.tabs input[id="radio-1"]:checked ~ .glider {
+  transform: translateX(2px);
+}
+
+.tabs input[id="radio-2"]:checked ~ .glider {
+  transform: translateX(calc(100% + 2px));
+}
+
+.notification {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin-left: 6px;
+  border-radius: 50%;
+  background-color: #3b82f6;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* 任务标签不显示数字徽章时隐藏 */
+.tab .notification:empty {
+  display: none;
+}
