@@ -1,7 +1,12 @@
-from fastapi import APIRouter, Form, Request
+from fastapi import APIRouter, Depends, Form, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.database import get_db
+from app.deps import get_current_user, get_optional_user
+from app.models import User, WritingRecord
 from app.writing_scorer import score_essay
 
 import os
@@ -75,6 +80,8 @@ async def score_essay_endpoint(
     request: Request,
     essay: str = Form(...),
     task_type: str = Form(default="task2"),
+    user: User | None = Depends(get_optional_user),
+    db: AsyncSession = Depends(get_db),
 ):
     if not essay or len(essay.strip()) < 50:
         return templates.TemplateResponse(
@@ -104,6 +111,21 @@ async def score_essay_endpoint(
             context={"error": user_message},
         )
 
+    # Save to history if user is logged in
+    if user is not None:
+        scores = result.get("scores", {})
+        record = WritingRecord(
+            user_id=user.id,
+            task_type=task_type,
+            task_response=scores.get("task_response"),
+            coherence_cohesion=scores.get("coherence_cohesion"),
+            lexical_resource=scores.get("lexical_resource"),
+            grammatical_range=scores.get("grammatical_range"),
+            overall=result.get("overall"),
+        )
+        db.add(record)
+        await db.commit()
+
     result_md = format_result_markdown(result)
     return templates.TemplateResponse(
         request=request,
@@ -113,4 +135,25 @@ async def score_essay_endpoint(
             "original_essay": essay,
             "task_type": task_type,
         },
+    )
+
+
+@router.get("/history", response_class=HTMLResponse)
+async def writing_history(
+    request: Request,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(
+        select(WritingRecord)
+        .where(WritingRecord.user_id == current_user.id)
+        .order_by(WritingRecord.created_at.desc())
+        .limit(20)
+    )
+    records = result.scalars().all()
+
+    return templates.TemplateResponse(
+        request=request,
+        name="history.html",
+        context={"records": records},
     )
