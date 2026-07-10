@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}口语练习 — IELTS Lab{% endblock %}
+{% block content %}
+
+<div class="hero">
+    <h1>Speak with confidence</h1>
+    <p>Practice IELTS Speaking Part 2 with AI-generated cue cards. Type your response, then get scored on all four Speaking criteria.</p>
+    <div class="hero-actions">
+        <button class="btn btn-primary" onclick="document.getElementById('responseText').focus();document.getElementById('responseText').scrollIntoView({behavior:'smooth'});">Start Speaking</button>
+        <button class="btn btn-ghost" onclick="location.reload();">New Topic</button>
+    </div>
+</div>
+
+<div class="container">
+    {% if error %}
+    <div class="alert-danger">{{ error }}</div>
+    {% endif %}
+
+    <!-- Cue Card -->
+    <div class="card" style="border-left: 4px solid var(--purple); background: linear-gradient(135deg, #faf9ff 0%, #ffffff 100%);">
+        <h2 class="card-title" style="font-size: 20px; color: var(--purple);">IELTS Speaking Part 2</h2>
+        <p class="card-subtitle" style="color: var(--heading); font-size: 18px; font-weight: 400; margin-top: 8px;">
+            {{ topic.get('topic_title', 'Describe a memorable trip you have taken') }}
+        </p>
+        <div style="margin: 18px 0;">
+            {% for point in topic.get('bullet_points', []) %}
+            <div style="display: flex; align-items: flex-start; gap: 8px; padding: 6px 0; font-size: 15px; color: var(--body);">
+                <span style="color: var(--purple); font-weight: 600; flex-shrink: 0;">&bull;</span>
+                <span>{{ point }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        <p style="font-size: 14px; color: var(--muted); font-style: italic;">
+            {{ topic.get('instruction', 'You should say:') }}
+        </p>
+    </div>
+
+    <!-- Response Form -->
+    <div class="card">
+        <h2 class="card-title">Your Response</h2>
+        <p class="card-subtitle">Type your 1-2 minute response below. Aim for 150-250 words.</p>
+        <form method="post" action="/speaking/score">
+            {% set topic_lines = [topic.get('topic_title', 'IELTS Speaking Part 2'), ''] %}
+            {% for point in topic.get('bullet_points', []) %}
+              {% set _ = topic_lines.append('- ' + point) %}
+            {% endfor %}
+            {% if topic.get('instruction', '') %}
+              {% set _ = topic_lines.append('') %}
+              {% set _ = topic_lines.append(topic.get('instruction', '')) %}
+            {% endif %}
+            <input type="hidden" name="topic_card" value="{{ '\n'.join(topic_lines) }}">
+            <div class="form-group">
+                <textarea
+                    class="essay-textarea"
+                    id="responseText"
+                    name="response_text"
+                    placeholder="I'd like to talk about a memorable trip I took to...&#10;&#10;It was about two years ago when I went to...&#10;&#10;What made it so special was..."
+                    style="min-height: 280px;"
+                >{% if response_text %}{{ response_text }}{% endif %}</textarea>
+                <div class="word-count" id="wc">0 words</div>
+            </div>
+            <div style="display:flex; gap:12px; align-items:center; margin-top:4px;">
+                <button type="submit" class="btn btn-primary" id="scoreBtn">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                    Get AI Score
+                </button>
+                <button type="button" class="btn btn-ghost" onclick="location.reload();">New Topic</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+(function() {
+    var ta = document.getElementById('responseText');
+    var wc = document.getElementById('wc');
+    ta.addEventListener('input', function() {
+        var words = ta.value.trim().split(/\s+/).filter(Boolean).length;
+        wc.textContent = words + ' words';
+    });
+    ta.dispatchEvent(new Event('input'));
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}口语历史 — IELTS Lab{% endblock %}
+{% block content %}
+<div class="container">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:28px;">
+        <h1 class="page-title" style="margin-bottom:0;">口语练习历史</h1>
+        <a href="/speaking/" class="btn btn-ghost">返回练习</a>
+    </div>
+
+    {% if records %}
+    <div class="history-card">
+        <div class="history-header">
+            <h2>Recent Sessions</h2>
+            <span style="font-size:13px; color:var(--body);">{{ records|length }} sessions</span>
+        </div>
+        <table class="history-table">
+            <thead>
+                <tr>
+                    <th>日期</th>
+                    <th>话题</th>
+                    <th>Fluency</th>
+                    <th>Lexical</th>
+                    <th>Grammar</th>
+                    <th>Pronunciation</th>
+                    <th>总分</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in records %}
+                <tr>
+                    <td class="cell-muted">{{ r.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td style="max-width:240px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="{{ r.topic_card.split('\n')[0] if r.topic_card else '' }}">
+                        {{ r.topic_card.split('\n')[0] if r.topic_card else '-' }}
+                    </td>
+                    <td>{{ r.score_fluency if r.score_fluency is not none else '-' }}</td>
+                    <td>{{ r.score_lexical if r.score_lexical is not none else '-' }}</td>
+                    <td>{{ r.score_grammar if r.score_grammar is not none else '-' }}</td>
+                    <td>{{ r.score_pronunciation if r.score_pronunciation is not none else '-' }}</td>
+                    <td class="cell-score">{{ r.overall if r.overall is not none else '-' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>暂无口语练习记录</p>
+        <a href="/speaking/" class="btn btn-primary">开始练习</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

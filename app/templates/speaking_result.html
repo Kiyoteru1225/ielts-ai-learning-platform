@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}口语评分结果 — IELTS Lab{% endblock %}
+{% block content %}
+<div class="container">
+
+    <div class="card">
+        <h2 class="card-title">Your Speaking Band Score</h2>
+        <p class="card-subtitle">IELTS Speaking Part 2 — AI Evaluation</p>
+        <div class="score-grid">
+            <div class="score-item">
+                <div class="score-label">Fluency</div>
+                <div class="score-value">{{ scores.get('fluency', '-') }}</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Lexical</div>
+                <div class="score-value">{{ scores.get('lexical', '-') }}</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Grammar</div>
+                <div class="score-value">{{ scores.get('grammar', '-') }}</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Pronunciation</div>
+                <div class="score-value">{{ scores.get('pronunciation', '-') }}</div>
+            </div>
+            <div class="score-overall">
+                <div class="overall-badge">{{ overall }}</div>
+                <div class="overall-text">
+                    <div class="band">Overall Band {{ overall }}</div>
+                    <div class="desc">AI-evaluated score based on all four IELTS Speaking criteria</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="feedback-section">
+        <h3>Detailed Feedback</h3>
+
+        <div class="feedback-item">
+            <div class="feedback-criterion">Fluency &amp; Coherence <span class="pill">{{ scores.get('fluency', '-') }}</span></div>
+            <div class="feedback-text">
+                {% if strengths %}{{ strengths[0] if strengths|length > 0 else 'No specific feedback available.' }}{% else %}No specific feedback available.{% endif %}
+            </div>
+        </div>
+        <div class="feedback-item">
+            <div class="feedback-criterion">Lexical Resource <span class="pill">{{ scores.get('lexical', '-') }}</span></div>
+            <div class="feedback-text">
+                {% if weaknesses %}{{ weaknesses[0] if weaknesses|length > 0 else 'No specific feedback available.' }}{% else %}No specific feedback available.{% endif %}
+            </div>
+        </div>
+        <div class="feedback-item">
+            <div class="feedback-criterion">Grammatical Range <span class="pill">{{ scores.get('grammar', '-') }}</span></div>
+            <div class="feedback-text">
+                {% if suggestions %}{{ suggestions[0] if suggestions|length > 0 else 'No specific feedback available.' }}{% else %}No specific feedback available.{% endif %}
+            </div>
+        </div>
+        <div class="feedback-item">
+            <div class="feedback-criterion">Pronunciation <span class="pill">{{ scores.get('pronunciation', '-') }}</span></div>
+            <div class="feedback-text">
+                {% if weaknesses %}{{ weaknesses[1] if weaknesses|length > 1 else (weaknesses[0] if weaknesses|length > 0 else 'No specific feedback available.') }}{% else %}No specific feedback available.{% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-bottom:28px; display:flex; gap:12px;">
+        <a href="/speaking/" class="btn btn-ghost">Practice Again</a>
+        <a href="/speaking/history" class="btn btn-ghost">View History</a>
+    </div>
+
+    <div class="card">
+        <details class="collapsible">
+            <summary>查看话题卡和回答原文</summary>
+            <div class="collapsible-body">
+                <p style="font-weight:600; color:var(--heading); margin-bottom:8px;">Topic Card:</p>
+                <pre style="font-family:var(--font-mono); font-size:13px; color:var(--body); white-space:pre-wrap; margin-bottom:16px;">{{ topic_card }}</pre>
+                <p style="font-weight:600; color:var(--heading); margin-bottom:8px;">Your Response:</p>
+                <pre style="font-family:var(--font-mono); font-size:13px; color:var(--body); white-space:pre-wrap;">{{ original_response }}</pre>
+            </div>
+        </details>
+    </div>
+
+</div>
+{% endblock %}

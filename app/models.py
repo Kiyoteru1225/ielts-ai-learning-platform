@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer, String
+from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import relationship
 
 from app.database import Base
@@ -16,6 +16,7 @@ class User(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     writing_records = relationship("WritingRecord", back_populates="user")
+    speaking_records = relationship("SpeakingRecord", back_populates="user")
 
 
 class WritingRecord(Base):
@@ -32,3 +33,21 @@ class WritingRecord(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User", back_populates="writing_records")
+
+
+class SpeakingRecord(Base):
+    __tablename__ = "speaking_records"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    topic_card = Column(Text, nullable=False)
+    user_response = Column(Text, nullable=False)
+    score_fluency = Column(Float, nullable=True)
+    score_lexical = Column(Float, nullable=True)
+    score_grammar = Column(Float, nullable=True)
+    score_pronunciation = Column(Float, nullable=True)
+    overall = Column(Float, nullable=True)
+    feedback_json = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User", back_populates="speaking_records")
