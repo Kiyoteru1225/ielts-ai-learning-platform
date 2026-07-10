@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}Vocabulary · IELTS Lab{% endblock %}
+{% block content %}
+<div class="dark-section" style="margin-top:0;">
+  <div class="container">
+    <h2>Vocabulary Dashboard</h2>
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-value">{{ stats.total_words }}</div>
+        <div class="stat-label">Total Words</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{{ stats.mastered }}</div>
+        <div class="stat-label">Mastered</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{{ stats.due_today }}</div>
+        <div class="stat-label">Due Today</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div style="display:flex;gap:12px;margin-bottom:32px;flex-wrap:wrap;">
+    <a href="/vocabulary/review" class="btn btn-primary">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Start Review
+    </a>
+    <a href="/vocabulary/quiz" class="btn btn-ghost">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Take Quiz
+    </a>
+    <a href="/vocabulary/list" class="btn btn-ghost">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      Browse All
+    </a>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:32px;">
+    <div class="card" style="margin-bottom:0;">
+      <div class="card-title">Learning Progress</div>
+      <div class="card-subtitle">Your vocabulary journey</div>
+      <div style="margin-top:16px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:14px;">
+          <span style="color:var(--body);">Learning</span>
+          <span style="color:var(--heading);font-weight:600;">{{ stats.learning }}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:14px;">
+          <span style="color:var(--body);">Mastered</span>
+          <span style="color:var(--heading);font-weight:600;">{{ stats.mastered }}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:14px;">
+          <span style="color:var(--body);">Due Today</span>
+          <span style="color:var(--heading);font-weight:600;">{{ stats.due_today }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:0;">
+      <div class="card-title">Study Streak</div>
+      <div class="card-subtitle">Days in a row</div>
+      <div style="font-size:48px;font-weight:300;color:var(--purple);line-height:1;margin-top:16px;">
+        {{ stats.streak }}
+      </div>
+      <div style="font-size:14px;color:var(--body);margin-top:4px;">consecutive days</div>
+    </div>
+  </div>
+
+  {% if due_words %}
+  <div class="card">
+    <div class="card-title">Upcoming Reviews</div>
+    <div class="card-subtitle">Words due for review</div>
+    <div style="overflow-x:auto;margin-top:16px;">
+      <table class="history-table" style="width:100%;">
+        <thead>
+          <tr>
+            <th>Word</th>
+            <th>POS</th>
+            <th>Definition</th>
+            <th>Topic</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for w in due_words %}
+          <tr>
+            <td style="font-weight:600;">{{ w.word }}</td>
+            <td class="cell-muted">{{ w.pos }}</td>
+            <td>{{ w.definition_cn }}</td>
+            <td class="cell-muted">{{ w.topic }}</td>
+            <td>
+              <span style="padding:2px 8px;border-radius:4px;font-size:12px;background:rgba(83,58,253,0.1);color:var(--purple);">
+                {{ w.status }}
+              </span>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <p>No words due for review. Start a new review session to build your vocabulary!</p>
+    <a href="/vocabulary/review" class="btn btn-primary">Start Review</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Word List · IELTS Lab{% endblock %}
+{% block content %}
+<div class="container">
+  <h1 class="page-title" style="display:flex;align-items:center;justify-content:space-between;">
+    Word List
+    <a href="/vocabulary/" class="btn btn-ghost" style="font-size:14px;padding:6px 14px;">← Dashboard</a>
+  </h1>
+
+  <div class="task-tabs">
+    <a href="/vocabulary/list" class="task-pill {% if not active_topic %}active{% endif %}">All</a>
+    {% for t in topics %}
+    <a href="/vocabulary/list?topic={{ t }}" class="task-pill {% if active_topic == t %}active{% endif %}">
+      {{ topic_labels.get(t, t) }}
+    </a>
+    {% endfor %}
+  </div>
+
+  {% if words %}
+  <div class="card" style="padding:0;overflow:hidden;">
+    <div style="overflow-x:auto;">
+      <table class="history-table" style="width:100%;">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Word</th>
+            <th>POS</th>
+            <th>Definition</th>
+            <th>Difficulty</th>
+            <th>Topic</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for w in words %}
+          <tr>
+            <td class="cell-muted">{{ loop.index }}</td>
+            <td style="font-weight:600;">{{ w.word }}</td>
+            <td class="cell-muted">{{ w.pos }}</td>
+            <td>{{ w.definition_cn }}</td>
+            <td>
+              {% for i in range(5) %}
+              <span style="color:{{ 'var(--purple)' if i < w.difficulty else 'var(--border)' }};">●</span>
+              {% endfor %}
+            </td>
+            <td class="cell-muted">{{ topic_labels.get(w.topic, w.topic) }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <p>No words found{% if active_topic %} for this topic{% endif %}.</p>
+    <a href="/vocabulary/list" class="btn btn-ghost">Show All Words</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

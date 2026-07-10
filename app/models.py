@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 
 from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import relationship
@@ -17,6 +17,7 @@ class User(Base):
 
     writing_records = relationship("WritingRecord", back_populates="user")
     speaking_records = relationship("SpeakingRecord", back_populates="user")
+    vocabulary_records = relationship("UserVocabulary", back_populates="user")
 
 
 class WritingRecord(Base):
@@ -51,3 +52,33 @@ class SpeakingRecord(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User", back_populates="speaking_records")
+
+
+class Vocabulary(Base):
+    __tablename__ = "vocabulary"
+
+    id = Column(Integer, primary_key=True, index=True)
+    word = Column(String, unique=True, nullable=False, index=True)
+    pos = Column(String, nullable=False)
+    definition_cn = Column(String, nullable=False)
+    example_sentence = Column(String, nullable=False)
+    synonyms = Column(Text, nullable=False, default="[]")
+    topic = Column(String, nullable=False, index=True)
+    difficulty = Column(Integer, nullable=False, default=1)
+
+    user_records = relationship("UserVocabulary", back_populates="word")
+
+
+class UserVocabulary(Base):
+    __tablename__ = "user_vocabulary"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    word_id = Column(Integer, ForeignKey("vocabulary.id"), nullable=False, index=True)
+    status = Column(String, nullable=False, default="new")
+    next_review_at = Column(DateTime, nullable=True)
+    review_count = Column(Integer, nullable=False, default=0)
+    last_review_at = Column(DateTime, nullable=True)
+
+    user = relationship("User", back_populates="vocabulary_records")
+    word = relationship("Vocabulary", back_populates="user_records")
