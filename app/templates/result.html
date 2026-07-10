@@ -1,32 +1,82 @@
 {% extends "base.html" %}
-{% block title %}批改结果 · 雅思写作 AI 批改{% endblock %}
+{% block title %}批改结果 — IELTS Lab{% endblock %}
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <h1 class="mb-3">📝 批改结果</h1>
+<div class="container">
 
-        <div class="card mb-4">
-            <div class="card-body">
-                {{ result_md | safe }}
+    <div class="card">
+        <h2 class="card-title">Your Band Score</h2>
+        <p class="card-subtitle">IELTS Writing
+            {% if task_type == 'task1' %}Task 1 — Academic
+            {% elif task_type == 'task1_general' %}Task 1 — General
+            {% else %}Task 2 — Essay{% endif %}
+        </p>
+        <div class="score-grid">
+            <div class="score-item">
+                <div class="score-label">Task Response</div>
+                <div class="score-value">{{ scores.get('task_response', '-') }}</div>
             </div>
-        </div>
-
-        <div class="mb-4">
-            <a href="/writing/" class="btn btn-outline-primary">再评一篇</a>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <button class="btn btn-link text-decoration-none p-0" type="button" data-bs-toggle="collapse" data-bs-target="#originalEssay">
-                    📄 查看原文
-                </button>
+            <div class="score-item">
+                <div class="score-label">Coherence</div>
+                <div class="score-value">{{ scores.get('coherence_cohesion', '-') }}</div>
             </div>
-            <div id="originalEssay" class="collapse">
-                <div class="card-body">
-                    <pre class="mb-0" style="white-space: pre-wrap; word-wrap: break-word;">{{ original_essay }}</pre>
+            <div class="score-item">
+                <div class="score-label">Lexical</div>
+                <div class="score-value">{{ scores.get('lexical_resource', '-') }}</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Grammar</div>
+                <div class="score-value">{{ scores.get('grammatical_range', '-') }}</div>
+            </div>
+            <div class="score-overall">
+                <div class="overall-badge">{{ overall }}</div>
+                <div class="overall-text">
+                    <div class="band">Overall Band {{ overall }}</div>
+                    <div class="desc">AI-evaluated score based on all four IELTS Writing criteria</div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="feedback-section">
+        <h3>Detailed Feedback</h3>
+
+        <div class="feedback-item">
+            <div class="feedback-criterion">Task Response <span class="pill">{{ scores.get('task_response', '-') }}</span></div>
+            <div class="feedback-text">
+                {% if strengths %}{{ strengths[0] if strengths|length > 0 else 'No specific feedback available.' }}{% else %}No specific feedback available.{% endif %}
+            </div>
+        </div>
+        <div class="feedback-item">
+            <div class="feedback-criterion">Coherence & Cohesion <span class="pill">{{ scores.get('coherence_cohesion', '-') }}</span></div>
+            <div class="feedback-text">
+                {% if weaknesses %}{{ weaknesses[0] if weaknesses|length > 0 else 'No specific feedback available.' }}{% else %}No specific feedback available.{% endif %}
+            </div>
+        </div>
+        <div class="feedback-item">
+            <div class="feedback-criterion">Lexical Resource <span class="pill">{{ scores.get('lexical_resource', '-') }}</span></div>
+            <div class="feedback-text">
+                {% if suggestions %}{{ suggestions[0] if suggestions|length > 0 else 'No specific feedback available.' }}{% else %}No specific feedback available.{% endif %}
+            </div>
+        </div>
+        <div class="feedback-item">
+            <div class="feedback-criterion">Grammatical Range <span class="pill">{{ scores.get('grammatical_range', '-') }}</span></div>
+            <div class="feedback-text">
+                {% if weaknesses %}{{ weaknesses[1] if weaknesses|length > 1 else (weaknesses[0] if weaknesses|length > 0 else 'No specific feedback available.') }}{% else %}No specific feedback available.{% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-bottom:28px; display:flex; gap:12px;">
+        <a href="/writing/" class="btn btn-ghost">Score Another Essay</a>
+        <a href="/writing/history" class="btn btn-ghost">View History</a>
+    </div>
+
+    <div class="card">
+        <details class="collapsible">
+            <summary>查看原文</summary>
+            <div class="collapsible-body">{{ original_essay }}</div>
+        </details>
+    </div>
+
 </div>
 {% endblock %}

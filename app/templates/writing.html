@@ -1,43 +1,71 @@
 {% extends "base.html" %}
-{% block title %}雅思写作 AI 批改{% endblock %}
+{% block title %}写作批改 — IELTS Lab{% endblock %}
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <h1 class="mb-4">雅思写作 AI 批改</h1>
 
-        {% if error %}
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{ error }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-        {% endif %}
+<div class="hero">
+    <h1>Polish your writing, band by band</h1>
+    <p>AI-powered IELTS essay scoring with detailed feedback on all four criteria — Task Response, Coherence, Lexical Resource, and Grammar</p>
+    <div class="hero-actions">
+        <button class="btn btn-primary" onclick="document.getElementById('essay').focus();document.getElementById('essay').scrollIntoView({behavior:'smooth'});">Start Writing</button>
+        <button class="btn btn-ghost">See an Example</button>
+    </div>
+</div>
 
+<div class="container">
+    {% if error %}
+    <div class="alert-danger">{{ error }}</div>
+    {% endif %}
+
+    <div class="task-tabs" id="taskTabs">
+        <button class="task-pill active" data-task="task1">Task 1 — Academic</button>
+        <button class="task-pill" data-task="task1_general">Task 1 — General</button>
+        <button class="task-pill" data-task="task2">Task 2 — Essay</button>
+    </div>
+
+    <div class="card">
+        <h2 class="card-title">Your Essay</h2>
+        <p class="card-subtitle">Type or paste your response below (min 150 words for Task 1, 250 for Task 2)</p>
         <form method="post" action="/writing/score">
-            <div class="mb-3">
-                <label for="essay" class="form-label">作文内容</label>
+            <input type="hidden" name="task_type" id="taskTypeInput" value="task1">
+            <div class="form-group">
                 <textarea
-                    class="form-control"
+                    class="essay-textarea"
                     id="essay"
                     name="essay"
-                    rows="15"
-                    placeholder="在此粘贴你的雅思作文（至少50个字符）..."
-                    required
-                ></textarea>
+                    placeholder="The graph illustrates the percentage of people who used public transportation in five major cities between 2000 and 2020. Overall, there was a significant increase..."
+                >{% if essay %}{{ essay }}{% endif %}</textarea>
+                <div class="word-count" id="wc">0 words</div>
             </div>
-
-            <div class="mb-3">
-                <label class="form-label">任务类型</label>
-                <div class="tabs">
-                    <input type="radio" id="radio-1" name="task_type" value="task2" checked>
-                    <label class="tab" for="radio-1">Task 2（议论文）</label>
-                    <input type="radio" id="radio-2" name="task_type" value="task1">
-                    <label class="tab" for="radio-2">Task 1（图表描述）</label>
-                    <span class="glider"></span>
-                </div>
+            <div style="display:flex; gap:12px; align-items:center; margin-top:4px;">
+                <button type="submit" class="btn btn-primary" id="scoreBtn">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                    Get AI Score
+                </button>
+                <button type="button" class="btn btn-ghost">Save Draft</button>
             </div>
-
-            <button type="submit" class="btn btn-primary btn-lg">提交批改</button>
         </form>
     </div>
 </div>
+
+<script>
+(function() {
+    var ta = document.getElementById('essay');
+    var wc = document.getElementById('wc');
+    ta.addEventListener('input', function() {
+        var words = ta.value.trim().split(/\s+/).filter(Boolean).length;
+        wc.textContent = words + ' words';
+    });
+    ta.dispatchEvent(new Event('input'));
+
+    var pills = document.querySelectorAll('#taskTabs .task-pill');
+    var input = document.getElementById('taskTypeInput');
+    pills.forEach(function(p) {
+        p.addEventListener('click', function() {
+            pills.forEach(function(x) { x.classList.remove('active'); });
+            p.classList.add('active');
+            input.value = p.getAttribute('data-task');
+        });
+    });
+})();
+</script>
 {% endblock %}

@@ -134,6 +134,12 @@ async def score_essay_endpoint(
             "result_md": result_md,
             "original_essay": essay,
             "task_type": task_type,
+            "scores": result.get("scores", {}),
+            "overall": result.get("overall"),
+            "strengths": result.get("strengths", []),
+            "weaknesses": result.get("weaknesses", []),
+            "suggestions": result.get("suggestions", []),
+            "essay_preview": essay[:120] + ("..." if len(essay) > 120 else ""),
         },
     )
 

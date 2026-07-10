@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IELTS Writing — Linear Style</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #08090a;
+      --panel: #0f1011;
+      --surface: #191a1b;
+      --surface-hover: #28282c;
+      --text-primary: #f7f8f8;
+      --text-secondary: #d0d6e0;
+      --text-tertiary: #8a8f98;
+      --text-quaternary: #62666d;
+      --brand: #5e6ad2;
+      --accent: #7170ff;
+      --accent-hover: #828fff;
+      --border: rgba(255,255,255,0.08);
+      --border-subtle: rgba(255,255,255,0.05);
+      --btn-ghost: rgba(255,255,255,0.02);
+      --green: #10b981;
+      --font: 'Inter', -apple-system, system-ui, 'Segoe UI', Roboto, sans-serif;
+    }
+    body {
+      font-family: var(--font);
+      color: var(--text-primary);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    /* Nav */
+    nav {
+      background: var(--bg);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px; height: 52px;
+    }
+    .nav-brand { font-size: 14px; font-weight: 510; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
+    .nav-brand-icon { width: 24px; height: 24px; background: var(--brand); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 12px; font-weight: 600; }
+    .nav-links { display: flex; gap: 20px; align-items: center; }
+    .nav-links a { font-size: 13px; font-weight: 510; color: var(--text-secondary); text-decoration: none; transition: color 0.15s; }
+    .nav-links a:hover { color: var(--text-primary); }
+    .nav-links a.active { color: var(--text-primary); }
+    .nav-avatar { width: 26px; height: 26px; border-radius: 6px; background: var(--surface); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 510; color: var(--text-secondary); }
+
+    /* Layout */
+    .container { max-width: 880px; margin: 0 auto; padding: 56px 24px; }
+
+    /* Header */
+    .page-header { margin-bottom: 44px; }
+    .page-header h1 { font-size: 36px; font-weight: 510; line-height: 1.0; letter-spacing: -0.8px; color: var(--text-primary); margin-bottom: 8px; }
+    .page-header p { font-size: 16px; font-weight: 400; color: var(--text-tertiary); line-height: 1.5; }
+
+    /* Task tabs */
+    .task-tabs { display: flex; gap: 8px; margin-bottom: 32px; }
+    .task-pill { padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 510; background: transparent; color: var(--text-secondary); border: 1px solid rgb(35, 37, 42); cursor: pointer; transition: all 0.15s; font-family: var(--font); }
+    .task-pill:hover { background: var(--btn-ghost); border-color: var(--border); }
+    .task-pill.active { background: rgba(94,106,210,0.15); color: var(--accent); border-color: rgba(94,106,210,0.3); }
+
+    /* Writing card */
+    .writing-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 28px; margin-bottom: 28px; }
+    .writing-card h2 { font-size: 18px; font-weight: 590; color: var(--text-primary); margin-bottom: 4px; letter-spacing: -0.2px; }
+    .writing-card .card-subtitle { font-size: 13px; color: var(--text-quaternary); margin-bottom: 20px; }
+    .essay-textarea { width: 100%; min-height: 320px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-family: var(--font); font-size: 15px; font-weight: 400; line-height: 1.6; color: var(--text-secondary); resize: vertical; outline: none; transition: border-color 0.15s; }
+    .essay-textarea:focus { border-color: var(--accent); }
+    .essay-textarea::placeholder { color: var(--text-quaternary); }
+    .word-count { font-size: 12px; color: var(--text-quaternary); margin-top: 8px; }
+
+    /* Buttons */
+    .btn-primary { display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; background: var(--brand); color: #fff; border: none; border-radius: 6px; font-family: var(--font); font-size: 14px; font-weight: 510; cursor: pointer; transition: all 0.15s; margin-top: 18px; }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-primary:active { transform: scale(0.98); }
+    .btn-ghost { display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; background: var(--btn-ghost); color: var(--text-secondary); border: 1px solid rgb(36, 40, 44); border-radius: 6px; font-family: var(--font); font-size: 14px; font-weight: 510; cursor: pointer; transition: all 0.15s; }
+    .btn-ghost:hover { border-color: var(--border); }
+
+    /* Score grid */
+    .score-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 20px; }
+    .score-item { background: var(--panel); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 14px; text-align: center; }
+    .score-label { font-size: 10px; font-weight: 510; color: var(--text-quaternary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .score-value { font-size: 28px; font-weight: 590; color: var(--text-primary); line-height: 1; }
+    .score-overall { grid-column: span 4; background: rgba(94,106,210,0.08); border: 1px solid rgba(94,106,210,0.15); display: flex; align-items: center; justify-content: center; gap: 20px; padding: 18px; border-radius: 10px; }
+    .score-overall .overall-badge { font-size: 44px; font-weight: 590; color: var(--accent); line-height: 1; }
+    .overall-text { text-align: left; }
+    .overall-text .band { font-size: 18px; font-weight: 590; color: var(--text-primary); }
+    .overall-text .desc { font-size: 13px; color: var(--text-tertiary); }
+
+    /* Feedback */
+    .feedback-section { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 28px; margin-bottom: 28px; }
+    .feedback-section h3 { font-size: 16px; font-weight: 590; color: var(--text-primary); margin-bottom: 18px; }
+    .feedback-item { padding: 14px 0; border-bottom: 1px solid var(--border-subtle); }
+    .feedback-item:last-child { border-bottom: none; }
+    .feedback-criterion { font-size: 13px; font-weight: 590; color: var(--text-primary); margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+    .feedback-criterion .pill { padding: 1px 7px; border-radius: 9999px; font-size: 10px; font-weight: 510; background: var(--green); color: var(--text-primary); }
+    .feedback-text { font-size: 14px; color: var(--text-tertiary); line-height: 1.6; }
+
+    /* History table */
+    .history-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .history-header { padding: 18px 28px; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between; }
+    .history-header h2 { font-size: 16px; font-weight: 590; }
+    .history-header .count { font-size: 12px; color: var(--text-quaternary); }
+    .history-row { display: flex; align-items: center; padding: 12px 28px; border-bottom: 1px solid var(--border-subtle); cursor: pointer; transition: background 0.1s; }
+    .history-row:hover { background: var(--btn-ghost); }
+    .history-row:last-child { border-bottom: none; }
+    .history-date { font-size: 12px; color: var(--text-quaternary); width: 90px; flex-shrink: 0; }
+    .history-task { font-size: 12px; font-weight: 510; color: var(--text-secondary); width: 70px; flex-shrink: 0; }
+    .history-preview { font-size: 14px; color: var(--text-tertiary); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-right: 16px; }
+    .history-score { font-size: 20px; font-weight: 590; color: var(--text-primary); text-align: right; }
+    .history-score .band-label { font-size: 10px; font-weight: 400; color: var(--text-quaternary); }
+
+    footer { text-align: center; padding: 36px 24px; font-size: 12px; color: var(--text-quaternary); }
+
+    @media (max-width: 768px) {
+      .container { padding: 40px 16px; }
+      .page-header h1 { font-size: 28px; letter-spacing: -0.5px; }
+      .score-grid { grid-template-columns: repeat(2, 1fr); }
+      .score-overall { grid-column: span 2; }
+      .history-date, .history-task { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand"><div class="nav-brand-icon">I</div><span>IELTS Lab</span></div>
+  <div class="nav-links">
+    <a href="#" class="active">Writing</a>
+    <a href="#">Speaking</a>
+    <a href="#">Vocabulary</a>
+    <div class="nav-avatar">K</div>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="page-header">
+    <h1>Writing Practice</h1>
+    <p>Paste your essay, get AI-powered feedback on all four IELTS criteria</p>
+  </div>
+
+  <div class="task-tabs">
+    <button class="task-pill active">Task 1 — Academic</button>
+    <button class="task-pill">Task 1 — General</button>
+    <button class="task-pill">Task 2 — Essay</button>
+  </div>
+
+  <div class="writing-card">
+    <h2>Your Essay</h2>
+    <p class="card-subtitle">Type or paste your response below (min 150 words Task 1, 250 Task 2)</p>
+    <textarea class="essay-textarea" placeholder="The graph illustrates the percentage of people who used public transportation in five major cities between 2000 and 2020. Overall, there was a significant increase..."></textarea>
+    <div class="word-count" id="wordCount">0 words</div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn-primary" id="scoreBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Get AI Score
+      </button>
+      <button class="btn-ghost">Save Draft</button>
+    </div>
+  </div>
+
+  <div class="writing-card" id="scorePanel" style="display:none;">
+    <h2>Your Band Score</h2>
+    <p class="card-subtitle">IELTS Writing Task 1 — Academic</p>
+    <div class="score-grid">
+      <div class="score-item"><div class="score-label">Task Resp.</div><div class="score-value">6.5</div></div>
+      <div class="score-item"><div class="score-label">Coherence</div><div class="score-value">7.0</div></div>
+      <div class="score-item"><div class="score-label">Lexical</div><div class="score-value">6.5</div></div>
+      <div class="score-item"><div class="score-label">Grammar</div><div class="score-value">6.5</div></div>
+      <div class="score-overall">
+        <div class="overall-badge">6.5</div>
+        <div class="overall-text"><div class="band">Overall Band 6.5</div><div class="desc">Competent user — generally effective command</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="feedback-section" id="feedbackPanel" style="display:none;">
+    <h3>Detailed Feedback</h3>
+    <div class="feedback-item"><div class="feedback-criterion">Task Response <span class="pill">6.5</span></div><div class="feedback-text">You've addressed the main features, but the overview could be more developed. Add a clearer summary of trends before details.</div></div>
+    <div class="feedback-item"><div class="feedback-criterion">Coherence & Cohesion <span class="pill">7.0</span></div><div class="feedback-text">Good use of linking words and logical paragraphing. Vary your cohesive devices — "similarly" appears twice.</div></div>
+    <div class="feedback-item"><div class="feedback-criterion">Lexical Resource <span class="pill">6.5</span></div><div class="feedback-text">Appropriate trend vocabulary. For band 7, incorporate "sharply", "gradually", or "plateaued".</div></div>
+    <div class="feedback-item"><div class="feedback-criterion">Grammatical Range <span class="pill">6.5</span></div><div class="feedback-text">Mostly error-free with some complex structures. Watch article usage before superlatives.</div></div>
+  </div>
+
+  <div class="history-card">
+    <div class="history-header"><h2>Recent Submissions</h2><span class="count">8 essays</span></div>
+    <div class="history-row" onclick="document.getElementById('scorePanel').style.display='block';document.getElementById('feedbackPanel').style.display='block';">
+      <span class="history-date">Jul 10, 2026</span><span class="history-task">Task 1</span><span class="history-preview">The graph illustrates the percentage of people who used public transportation...</span><span class="history-score">6.5<span class="band-label"> band</span></span>
+    </div>
+    <div class="history-row"><span class="history-date">Jul 09, 2026</span><span class="history-task">Task 2</span><span class="history-preview">Some people believe that governments should invest more in public transport...</span><span class="history-score">6.0<span class="band-label"> band</span></span></div>
+    <div class="history-row"><span class="history-date">Jul 08, 2026</span><span class="history-task">Task 1</span><span class="history-preview">The bar chart compares the average monthly rainfall in three regions...</span><span class="history-score">7.0<span class="band-label"> band</span></span></div>
+    <div class="history-row"><span class="history-date">Jul 07, 2026</span><span class="history-task">Task 2</span><span class="history-preview">In many countries, traditional foods are being replaced by international fast...</span><span class="history-score">6.5<span class="band-label"> band</span></span></div>
+    <div class="history-row"><span class="history-date">Jul 06, 2026</span><span class="history-task">Task 1</span><span class="history-preview">The pie charts show the distribution of energy sources used for electricity...</span><span class="history-score">5.5<span class="band-label"> band</span></span></div>
+  </div>
+</div>
+
+<footer>IELTS AI Learning Platform · Powered by DeepSeek</footer>
+
+<script>
+  const textarea = document.querySelector('.essay-textarea');
+  const wc = document.getElementById('wordCount');
+  const scoreBtn = document.getElementById('scoreBtn');
+  textarea.addEventListener('input', ()=>{ const w = textarea.value.trim().split(/\s+/).filter(Boolean).length; wc.textContent = w + ' words'; });
+  scoreBtn.addEventListener('click', ()=>{
+    scoreBtn.textContent='Analyzing...'; scoreBtn.disabled=true;
+    setTimeout(()=>{
+      document.getElementById('scorePanel').style.display='block';
+      document.getElementById('feedbackPanel').style.display='block';
+      scoreBtn.textContent='Get AI Score'; scoreBtn.disabled=false;
+      document.getElementById('scorePanel').scrollIntoView({behavior:'smooth'});
+    },1200);
+  });
+  document.querySelectorAll('.task-pill').forEach(p=>p.addEventListener('click',()=>{document.querySelectorAll('.task-pill').forEach(x=>x.classList.remove('active'));p.classList.add('active');}));
+</script>
+</body>
+</html>
