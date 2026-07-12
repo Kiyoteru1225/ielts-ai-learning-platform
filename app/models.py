@@ -19,6 +19,8 @@ class User(Base):
     speaking_records = relationship("SpeakingRecord", back_populates="user")
     vocabulary_records = relationship("UserVocabulary", back_populates="user")
 
+    reading_records = relationship("ReadingRecord", back_populates="user")
+
 
 class WritingRecord(Base):
     __tablename__ = "writing_records"
@@ -82,3 +84,20 @@ class UserVocabulary(Base):
 
     user = relationship("User", back_populates="vocabulary_records")
     word = relationship("Vocabulary", back_populates="user_records")
+
+
+class ReadingRecord(Base):
+    __tablename__ = "reading_records"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    topic = Column(String, nullable=False)
+    passage = Column(Text, nullable=False)
+    questions_json = Column(Text, nullable=False)
+    user_answers_json = Column(Text, nullable=True)
+    score = Column(Float, nullable=True)
+    total = Column(Integer, nullable=True)
+    feedback_json = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User", back_populates="reading_records")

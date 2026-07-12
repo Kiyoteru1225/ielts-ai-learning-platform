@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Reading History — IELTS Lab{% endblock %}
+{% block content %}
+<div class="container">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;">
+        <h1 class="page-title" style="margin-bottom:0;">Reading Practice History</h1>
+        <a href="/reading/" class="btn btn-ghost">New Practice</a>
+    </div>
+
+    {% if records %}
+    <div class="history-card">
+        <div class="history-header">
+            <h2>Recent Sessions</h2>
+            <span style="font-size:13px;color:var(--body);">{{ records|length }} sessions</span>
+        </div>
+        <table class="history-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Topic</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in records %}
+                <tr>
+                    <td class="cell-muted">{{ r.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td>{{ r.topic }}</td>
+                    <td class="cell-score">{{ r.score if r.score is not none else '-' }} / {{ r.total if r.total is not none else '-' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>No reading practice records yet.</p>
+        <a href="/reading/" class="btn btn-primary">Start Reading Practice</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

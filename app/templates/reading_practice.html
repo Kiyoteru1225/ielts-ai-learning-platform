@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}{{ topic }} — Reading Practice{% endblock %}
+{% block content %}
+
+<div class="container" style="max-width:1280px;padding-top:36px;">
+    {% if error %}
+    <div class="alert-danger">{{ error }}</div>
+    {% endif %}
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+        <div>
+            <h1 class="page-title" style="margin-bottom:0;">Reading Practice</h1>
+            <p style="font-size:14px;color:var(--body);margin-top:4px;">Topic: {{ topic }}</p>
+        </div>
+        <a href="/reading/" class="btn btn-ghost">Change Topic</a>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;">
+        <!-- Left: Reading Passage -->
+        <div class="card" style="max-height:80vh;overflow-y:auto;position:sticky;top:80px;">
+            <h2 class="card-title" style="font-size:18px;margin-bottom:20px;">Reading Passage</h2>
+            <div style="font-size:15px;font-weight:300;line-height:1.75;color:var(--heading);white-space:pre-wrap;">
+                {{ passage }}
+            </div>
+        </div>
+
+        <!-- Right: Questions -->
+        <div>
+            <form method="post" action="/reading/check" id="answers-form">
+                <input type="hidden" name="topic" value="{{ topic }}">
+                <input type="hidden" name="passage" value="{{ passage }}">
+                <input type="hidden" name="questions_json" value="{{ questions_json }}">
+
+                {% for q in questions %}
+                <div class="card" style="padding:24px;">
+                    <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:14px;">
+                        <span style="font-size:12px;font-weight:600;color:var(--purple);background:var(--purple-bg);padding:2px 8px;border-radius:4px;white-space:nowrap;">Q{{ q.id }}</span>
+                        <span style="font-size:12px;font-weight:400;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;padding-top:1px;">{{ q.type | replace('_', ' ') }}</span>
+                    </div>
+                    <p style="font-size:15px;font-weight:400;color:var(--heading);line-height:1.6;margin-bottom:14px;">{{ q.question_text }}</p>
+
+                    {% if q.type == 'true_false_not_given' %}
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                        {% for opt in ['True', 'False', 'Not Given'] %}
+                        <label style="display:flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;font-size:14px;color:var(--heading);transition:border-color 0.15s;">
+                            <input type="radio" name="q_{{ q.id }}" value="{{ opt }}" style="accent-color:var(--purple);">
+                            {{ opt }}
+                        </label>
+                        {% endfor %}
+                    </div>
+
+                    {% elif q.type == 'multiple_choice' %}
+                    <div style="display:flex;flex-direction:column;gap:8px;">
+                        {% for opt in q.options %}
+                        <label style="display:flex;align-items:center;gap:10px;padding:9px 14px;border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;font-size:14px;color:var(--heading);transition:border-color 0.15s;">
+                            <input type="radio" name="q_{{ q.id }}" value="{{ opt.key }}" style="accent-color:var(--purple);">
+                            <span style="font-weight:600;color:var(--purple);min-width:18px;">{{ opt.key }}.</span>
+                            <span>{{ opt.text }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+
+                    {% elif q.type == 'sentence_completion' %}
+                    <input type="text" class="form-input" name="q_{{ q.id }}" placeholder="Type your answer (NO MORE THAN TWO WORDS)" style="max-width:360px;">
+
+                    {% elif q.type == 'matching_headings' %}
+                    <div style="margin-bottom:12px;padding:10px 14px;background:#f8f9fb;border-radius:var(--radius);font-size:13px;color:var(--body);line-height:1.7;">
+                        {% for opt in q.options %}
+                        <span style="font-weight:600;color:var(--heading);">{{ opt.key }}.</span> {{ opt.text }}<br>
+                        {% endfor %}
+                    </div>
+                    <select class="form-input" name="q_{{ q.id }}" style="max-width:200px;">
+                        <option value="">— Select heading —</option>
+                        {% for opt in q.options %}
+                        <option value="{{ opt.key }}">{{ opt.key }}. {{ opt.text[:80] }}{% if opt.text|length > 80 %}...{% endif %}</option>
+                        {% endfor %}
+                    </select>
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+                <div style="margin-top:8px;">
+                    <button type="submit" class="btn btn-primary btn-block" style="padding:14px 24px;font-size:17px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        Submit Answers
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    var form = document.getElementById('answers-form');
+    form.addEventListener('submit', function(e) {
+        var radios = form.querySelectorAll('input[type="radio"]');
+        var groups = {};
+        radios.forEach(function(r) {
+            var name = r.getAttribute('name');
+            if (!groups[name]) groups[name] = false;
+            if (r.checked) groups[name] = true;
+        });
+        var unanswered = [];
+        Object.keys(groups).forEach(function(name) {
+            if (!groups[name]) unanswered.push(name.replace('q_', ''));
+        });
+        // Allow submission — unauthenticated users may skip questions
+    });
+})();
+</script>
+{% endblock %}

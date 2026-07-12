@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Reading Practice — IELTS Lab{% endblock %}
+{% block content %}
+
+<div class="hero">
+    <h1>Read with precision</h1>
+    <p>Practice IELTS Academic Reading with AI-generated passages and mixed question types. Read, answer, and get instant scoring.</p>
+    <div class="hero-actions">
+        <button class="btn btn-primary" onclick="document.getElementById('topic-form').scrollIntoView({behavior:'smooth'});">Choose a Topic</button>
+        <a href="/reading/history" class="btn btn-ghost">View History</a>
+    </div>
+</div>
+
+<div class="container">
+    {% if error %}
+    <div class="alert-danger">{{ error }}</div>
+    {% endif %}
+
+    <div class="card" id="topic-form">
+        <h2 class="card-title">Select a Reading Topic</h2>
+        <p class="card-subtitle">Choose a topic to generate an IELTS Academic Reading passage with 10 mixed-type questions.</p>
+
+        <form method="post" action="/reading/practice">
+            <div class="form-group">
+                <label class="form-label" for="topic">Topic</label>
+                <select class="form-input" id="topic" name="topic">
+                    <option value="">— Select a topic —</option>
+                    {% for t in topics %}
+                    <option value="{{ t }}">{{ t }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div style="display:flex;gap:12px;align-items:center;">
+                <button type="submit" class="btn btn-primary">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                    Start Reading
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2 class="card-title">Question Types</h2>
+        <p class="card-subtitle">Each practice set includes 10 questions across 4 IELTS Reading question types.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;">
+            <div style="padding:12px 16px;background:#f8f9fb;border-radius:var(--radius);font-size:14px;color:var(--heading);">
+                <strong>True / False / Not Given</strong>
+                <span style="display:block;font-size:13px;color:var(--body);margin-top:2px;">3 questions</span>
+            </div>
+            <div style="padding:12px 16px;background:#f8f9fb;border-radius:var(--radius);font-size:14px;color:var(--heading);">
+                <strong>Multiple Choice</strong>
+                <span style="display:block;font-size:13px;color:var(--body);margin-top:2px;">3 questions</span>
+            </div>
+            <div style="padding:12px 16px;background:#f8f9fb;border-radius:var(--radius);font-size:14px;color:var(--heading);">
+                <strong>Sentence Completion</strong>
+                <span style="display:block;font-size:13px;color:var(--body);margin-top:2px;">2 questions</span>
+            </div>
+            <div style="padding:12px 16px;background:#f8f9fb;border-radius:var(--radius);font-size:14px;color:var(--heading);">
+                <strong>Matching Headings</strong>
+                <span style="display:block;font-size:13px;color:var(--body);margin-top:2px;">2 questions</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
