@@ -31,15 +31,43 @@
             --danger-bg:   rgba(234,34,97,0.08);
             --font:        'Source Sans 3', system-ui, -apple-system, sans-serif;
             --font-mono:   'Source Code Pro', ui-monospace, monospace;
+            --input-bg:    var(--surface);
+            --input-border: var(--border);
+            --nav-bg:      rgba(255,255,255,0.85);
+            --subtle-bg:   #f8f9fb;
+            --code-bg:     #f1f5f9;
+            --score-overall-bg: linear-gradient(135deg, #f5f3ff 0%, #f0eeff 100%);
+            --hero-bg:     var(--surface);
         }
 
+
+        [data-theme="dark"] {
+            --bg:          #0d1117;
+            --surface:     #161b22;
+            --heading:     #e6edf3;
+            --body:        #8b949e;
+            --label:       #c9d1d9;
+            --muted:       #484f58;
+            --border:      #21262d;
+            --input-bg:    #0d1117;
+            --input-border:#30363d;
+            --nav-bg:      rgba(13,17,23,0.85);
+            --subtle-bg:   #21262d;
+            --code-bg:     #21262d;
+            --score-overall-bg: linear-gradient(135deg, #1a1245 0%, #161040 100%);
+            --hero-bg:     #0d1117;
+            --purple-bg:   #1a1245;
+            --shadow-card: none;
+            --shadow-sm:   none;
+            --danger-bg:   rgba(234,34,97,0.15);
+        }
         html { font-size: 16px; -webkit-font-smoothing: antialiased; }
         body { font-family: var(--font); color: var(--heading); background: var(--bg); min-height: 100vh; display: flex; flex-direction: column; }
 
         /* Navigation */
         nav {
             position: sticky; top: 0; z-index: 10;
-            background: rgba(255,255,255,0.85);
+            background: var(--nav-bg);
             backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border);
             display: flex; align-items: center; justify-content: space-between;
@@ -58,7 +86,7 @@
         .container-narrow { max-width: 480px; margin: 0 auto; padding: 48px 24px; }
 
         /* Hero */
-        .hero { background: var(--surface); padding: 72px 32px 56px; text-align: center; }
+        .hero { background: var(--hero-bg); padding: 72px 32px 56px; text-align: center; }
         .hero h1 { font-size: 48px; font-weight: 300; line-height: 1.15; letter-spacing: -0.96px; color: var(--heading); margin-bottom: 12px; max-width: 700px; margin-left: auto; margin-right: auto; }
         .hero p { font-size: 18px; font-weight: 300; color: var(--body); line-height: 1.4; max-width: 560px; margin: 0 auto 28px; }
         .hero-actions { display: flex; gap: 12px; justify-content: center; }
@@ -102,9 +130,9 @@
         .form-label { display: block; font-size: 14px; font-weight: 400; color: var(--label); margin-bottom: 6px; }
         .form-input {
             display: block; width: 100%; padding: 10px 14px;
-            border: 1px solid var(--border); border-radius: var(--radius);
+            border: 1px solid var(--input-border); border-radius: var(--radius);
             font-family: var(--font); font-size: 16px; font-weight: 300;
-            color: var(--heading); background: var(--surface);
+            color: var(--heading); background: var(--input-bg);
             transition: border-color 0.15s, box-shadow 0.15s; outline: none;
         }
         .form-input:focus { border-color: var(--purple); box-shadow: 0 0 0 3px rgba(83,58,253,0.1); }
@@ -127,7 +155,7 @@
         /* Essay textarea */
         .essay-textarea {
             width: 100%; min-height: 320px;
-            border: 1px solid var(--border); border-radius: var(--radius);
+            border: 1px solid var(--input-border); border-radius: var(--radius);
             padding: 14px; font-family: var(--font); font-size: 16px; font-weight: 300;
             line-height: 1.6; color: var(--heading); resize: vertical; outline: none;
             transition: border-color 0.15s;
@@ -140,12 +168,12 @@
 
         /* Score grid */
         .score-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 20px; }
-        .score-item { background: #f8f9fb; border: 1px solid var(--border); border-radius: 5px; padding: 16px; text-align: center; }
+        .score-item { background: var(--subtle-bg); border: 1px solid var(--border); border-radius: 5px; padding: 16px; text-align: center; }
         .score-label { font-size: 11px; font-weight: 400; color: var(--body); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
         .score-value { font-size: 30px; font-weight: 300; color: var(--heading); line-height: 1; }
         .score-overall {
             grid-column: span 4;
-            background: linear-gradient(135deg, #f5f3ff 0%, #f0eeff 100%);
+            background: var(--score-overall-bg);
             border: 1px solid var(--purple-light);
             display: flex; align-items: center; justify-content: center; gap: 24px;
             padding: 20px; border-radius: var(--radius-card);
@@ -185,14 +213,14 @@
         .history-table th {
             font-size: 11px; font-weight: 400; color: var(--body); text-transform: uppercase;
             letter-spacing: 0.5px; text-align: left; padding: 12px 32px;
-            background: #f8f9fb; border-bottom: 1px solid var(--border);
+            background: var(--subtle-bg); border-bottom: 1px solid var(--border);
         }
         .history-table td {
             font-size: 14px; color: var(--heading); padding: 14px 32px;
             border-bottom: 1px solid var(--border);
         }
         .history-table tbody tr { transition: background 0.1s; }
-        .history-table tbody tr:hover { background: #f8f9fb; }
+        .history-table tbody tr:hover { background: var(--subtle-bg); }
         .history-table tbody tr:last-child td { border-bottom: none; }
         .history-table .cell-muted { color: var(--muted); font-size: 12px; }
         .history-table .cell-score { font-size: 22px; font-weight: 300; color: var(--heading); }
@@ -216,8 +244,8 @@
         .card.markdown-content ul, .card.markdown-content ol { margin: 0 0 14px 20px; color: var(--body); }
         .card.markdown-content li { margin-bottom: 4px; }
         .card.markdown-content strong { color: var(--heading); font-weight: 600; }
-        .card.markdown-content code { font-family: var(--font-mono); font-size: 14px; background: #f1f5f9; padding: 2px 6px; border-radius: 3px; }
-        .card.markdown-content pre { background: #f1f5f9; padding: 16px; border-radius: var(--radius); overflow-x: auto; margin-bottom: 14px; }
+        .card.markdown-content code { font-family: var(--font-mono); font-size: 14px; background: var(--code-bg); padding: 2px 6px; border-radius: 3px; }
+        .card.markdown-content pre { background: var(--code-bg); padding: 16px; border-radius: var(--radius); overflow-x: auto; margin-bottom: 14px; }
         .card.markdown-content pre code { background: none; padding: 0; }
 
         /* Responsive */
@@ -237,6 +265,31 @@
             .feedback-section { padding: 24px; }
         }
     </style>
+
+    <script>
+        (function() {
+            var theme = localStorage.getItem("theme");
+            if (!theme) {
+                theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+            }
+            document.documentElement.setAttribute("data-theme", theme);
+        })();
+        function toggleTheme() {
+            var current = document.documentElement.getAttribute("data-theme");
+            var next = current === "dark" ? "light" : "dark";
+            document.documentElement.setAttribute("data-theme", next);
+            localStorage.setItem("theme", next);
+            var btn = document.getElementById("theme-toggle");
+            if (btn) btn.textContent = next === "dark" ? "☀️" : "🌙";
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            var btn = document.getElementById("theme-toggle");
+            if (btn) {
+                var theme = document.documentElement.getAttribute("data-theme");
+                btn.textContent = theme === "dark" ? "☀️" : "🌙";
+            }
+        });
+    </script>
 </head>
 <body>
     <nav>
@@ -250,6 +303,7 @@
             <a href="/speaking/" class="{% if request.url.path.startswith('/speaking/') %}active{% endif %}">Speaking</a>
             <a href="/reading/" class="{% if request.url.path.startswith('/reading/') %}active{% endif %}">Reading</a>
             <a href="/vocabulary/" class="{% if request.url.path.startswith('/vocabulary/') %}active{% endif %}">Vocabulary</a>
+            <button id="theme-toggle" onclick="toggleTheme()" style="background:none;border:none;cursor:pointer;font-size:18px;padding:4px 6px;line-height:1;border-radius:4px;" title="Toggle theme" aria-label="Toggle theme">🌙</button>
         </div>
     </nav>
 
