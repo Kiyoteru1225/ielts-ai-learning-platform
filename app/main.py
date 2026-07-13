@@ -1,7 +1,10 @@
 import logging
+import os
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
+from jinja2 import Environment, FileSystemLoader
+from starlette.templating import _TemplateResponse
 
 from app.database import Base, async_session, engine
 from app.routers import auth, listening, reading, speaking, vocabulary, writing
@@ -15,6 +18,11 @@ app.include_router(listening.router)
 app.include_router(reading.router)
 app.include_router(vocabulary.router)
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
+_TEMPLATE_DIR = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "templates"
+)
+_jinja_env = Environment(loader=FileSystemLoader(_TEMPLATE_DIR))
 
 
 @app.on_event("startup")
@@ -31,5 +39,6 @@ async def startup() -> None:
 
 
 @app.get("/")
-async def root():
-    return {"message": "IELTS AI Learning Platform", "version": "0.1.0"}
+async def root(request: Request):
+    template = _jinja_env.get_template("home.html")
+    return _TemplateResponse(template, {"request": request})

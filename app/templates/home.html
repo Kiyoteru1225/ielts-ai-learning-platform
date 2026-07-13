@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block title %}IELTS AI Learning Platform{% endblock %}
+
+{% block content %}
+<style>
+    .module-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        max-width: 920px;
+        margin: 0 auto;
+        padding: 48px 24px 24px;
+    }
+    .module-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-card);
+        box-shadow: var(--shadow-card);
+        padding: 32px 28px;
+        text-decoration: none;
+        color: inherit;
+        transition: transform 0.2s, box-shadow 0.2s;
+        display: flex;
+        flex-direction: column;
+    }
+    .module-card:hover {
+        transform: translateY(-3px);
+        box-shadow: rgba(50,50,93,0.25) 0px 34px 50px -30px, rgba(0,0,0,0.15) 0px 22px 40px -18px;
+    }
+    .module-icon {
+        font-size: 36px;
+        line-height: 1;
+        margin-bottom: 16px;
+    }
+    .module-name {
+        font-size: 20px;
+        font-weight: 400;
+        color: var(--heading);
+        margin-bottom: 8px;
+    }
+    .module-desc {
+        font-size: 15px;
+        font-weight: 300;
+        color: var(--body);
+        line-height: 1.5;
+        flex: 1;
+        margin-bottom: 16px;
+    }
+    .module-link {
+        font-size: 14px;
+        font-weight: 400;
+        color: var(--purple);
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+    .homepage-footer {
+        text-align: center;
+        padding: 32px 24px;
+        font-size: 13px;
+        color: var(--body);
+    }
+    @media (max-width: 768px) {
+        .module-grid {
+            grid-template-columns: 1fr;
+            padding: 36px 16px 20px;
+        }
+        .module-card { padding: 24px 20px; }
+    }
+</style>
+
+<div class="hero">
+    <h1>IELTS AI Learning Platform</h1>
+    <p>AI-powered IELTS practice — Writing, Speaking, Vocabulary, Reading, Listening</p>
+    <div class="hero-actions">
+        <a href="/writing/" class="btn btn-primary">Start &rarr;</a>
+    </div>
+</div>
+
+<div class="module-grid">
+    <a href="/writing/" class="module-card">
+        <span class="module-icon">✍️</span>
+        <span class="module-name">Writing</span>
+        <span class="module-desc">AI 雅思写作评分，TR/CC/LR/GRA 四项打分</span>
+        <span class="module-link">Start &rarr;</span>
+    </a>
+    <a href="/speaking/" class="module-card">
+        <span class="module-icon">🎤</span>
+        <span class="module-name">Speaking</span>
+        <span class="module-desc">AI 话题卡生成 + 流利度/词汇/语法/发音评分</span>
+        <span class="module-link">Start &rarr;</span>
+    </a>
+    <a href="/vocabulary/" class="module-card">
+        <span class="module-icon">📚</span>
+        <span class="module-name">Vocabulary</span>
+        <span class="module-desc">AWL 学术词库 + 艾宾浩斯间隔复习 + AI 出题</span>
+        <span class="module-link">Start &rarr;</span>
+    </a>
+    <a href="/reading/" class="module-card">
+        <span class="module-icon">📖</span>
+        <span class="module-name">Reading</span>
+        <span class="module-desc">AI 生成阅读文章 + 10 道混合题型 + 自动批改</span>
+        <span class="module-link">Start &rarr;</span>
+    </a>
+    <a href="/listening/" class="module-card">
+        <span class="module-icon">🎧</span>
+        <span class="module-name">Listening</span>
+        <span class="module-desc">AI 对话生成 + TTS 朗读 + 填空练习</span>
+        <span class="module-link">Start &rarr;</span>
+    </a>
+</div>
+
+<div class="homepage-footer">Built with Hermes + Codex</div>
+{% endblock %}
