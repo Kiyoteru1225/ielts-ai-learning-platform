@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}{{ scene_type }} — Listening Practice{% endblock %}
+{% block content %}
+
+<div class="container" style="max-width:1280px;padding-top:36px;">
+    {% if error %}
+    <div class="alert-danger">{{ error }}</div>
+    {% endif %}
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+        <div>
+            <h1 class="page-title" style="margin-bottom:0;">Listening Practice</h1>
+            <p style="font-size:14px;color:var(--body);margin-top:4px;">{{ scene_type }} · {{ voice_label }}</p>
+        </div>
+        <a href="/listening/" class="btn btn-ghost">Change Scene</a>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;">
+        <div style="position:sticky;top:80px;">
+            {% if audio_path %}
+           <div class="card" style="padding:24px;margin-bottom:16px;">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+                    <span style="font-size:14px;font-weight:400;color:var(--heading);">Audio Player</span>
+                    <span style="font-size:11px;color:var(--muted);">(Listen carefully to fill the blanks)</span>
+           </div>
+            {% else %}
+            <div class="card" style="padding:24px;margin-bottom:16px;background:rgba(234,34,97,0.05);border:1px solid rgba(234,34,97,0.15);">
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    <span style="font-size:13px;color:var(--danger);">Audio generation unavailable{% if tts_error %}: {{ tts_error }}{% endif %}. Read the script below and fill in the blanks.</span>
+                </div>
+            </div>
+            {% endif %}
+                <audio controls style="width:100%;border-radius:var(--radius);" preload="auto">
+                    <source src="/{{ audio_path }}" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+
+            <details class="collapsible" style="margin-top:0;">
+                <summary>Show Full Script</summary>
+                <div class="collapsible-body" style="font-size:15px;color:var(--heading);line-height:1.8;white-space:pre-wrap;">
+                    {{ script | replace('___', '<mark style="background:rgba(83,58,253,0.15);padding:2px 4px;border-radius:3px;">______</mark>') | safe }}
+                </div>
+            </details>
+        </div>
+
+        <div>
+            <form method="post" action="/listening/check" id="answers-form">
+                <input type="hidden" name="scene_type" value="{{ scene_type }}">
+                <input type="hidden" name="voice" value="{{ voice }}">
+                <input type="hidden" name="script" value="{{ script }}">
+                <input type="hidden" name="questions_json" value="{{ questions_json }}">
+                <input type="hidden" name="answers_json" value="{{ answers_json }}">
+                <input type="hidden" name="audio_path" value="{{ audio_path }}">
+
+                {% for q in questions %}
+                <div class="card" style="padding:24px;">
+                    <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;">
+                        <span style="font-size:12px;font-weight:600;color:var(--purple);background:var(--purple-bg);padding:2px 8px;border-radius:4px;">Q{{ q.id }}</span>
+                        <span style="font-size:12px;font-weight:400;color:var(--muted);">Gap-Fill</span>
+                    </div>
+                    <p style="font-size:15px;font-weight:400;color:var(--heading);line-height:1.6;margin-bottom:12px;">{{ q.question_text }}</p>
+                    <input type="text" class="form-input" name="q_{{ q.id }}" placeholder="Type your answer here" style="max-width:360px;">
+                </div>
+                {% endfor %}
+
+                <div style="margin-top:8px;">
+                    <button type="submit" class="btn btn-primary btn-block" style="padding:14px 24px;font-size:17px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        Submit Answers
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

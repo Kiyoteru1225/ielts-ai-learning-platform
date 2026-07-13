@@ -4,13 +4,14 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
 from app.database import Base, async_session, engine
-from app.routers import auth, reading, speaking, vocabulary, writing
+from app.routers import auth, listening, reading, speaking, vocabulary, writing
 
 app = FastAPI(title="IELTS AI Learning Platform", version="0.1.0")
 
 app.include_router(writing.router)
 app.include_router(auth.router)
 app.include_router(speaking.router)
+app.include_router(listening.router)
 app.include_router(reading.router)
 app.include_router(vocabulary.router)
 app.mount("/static", StaticFiles(directory="static"), name="static")

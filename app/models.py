@@ -18,6 +18,7 @@ class User(Base):
     writing_records = relationship("WritingRecord", back_populates="user")
     speaking_records = relationship("SpeakingRecord", back_populates="user")
     vocabulary_records = relationship("UserVocabulary", back_populates="user")
+    listening_records = relationship("ListeningRecord", back_populates="user")
 
     reading_records = relationship("ReadingRecord", back_populates="user")
 
@@ -101,3 +102,22 @@ class ReadingRecord(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User", back_populates="reading_records")
+
+
+class ListeningRecord(Base):
+    __tablename__ = "listening_records"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    scene_type = Column(String, nullable=False)
+    voice = Column(String, nullable=True)
+    script = Column(Text, nullable=False)
+    questions_json = Column(Text, nullable=False)
+    user_answers_json = Column(Text, nullable=True)
+    score = Column(Float, nullable=True)
+    total = Column(Integer, nullable=True)
+    audio_path = Column(String, nullable=True)
+    feedback_json = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User", back_populates="listening_records")
